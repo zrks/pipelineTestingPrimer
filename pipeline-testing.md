@@ -20,6 +20,39 @@ Lets add some filling:
 ```sh
 [sample-project] $ touch vars/samplePipeline.groovy \
 					 	 test/resources/sampleAppPipeline.jenkinsfile \
-					 	 test/groovy/com/example/TestSampleAppPipeline.groovy
+					 	 test/groovy/com/example/TestSampleAppPipeline.groovy \
+					 	 test/groovy/com/example/Helper.groovy
+```
+
+At this point our project should look like this:
+```sh
+.
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+├── src
+│   ├── main
+│   │   └── groovy
+│   │       └── Library.groovy
+│   └── test
+│       └── groovy
+│           └── LibraryTest.groovy
+├── test
+│   ├── groovy
+│   │   └── com
+│   │       └── example
+│   │           ├── Helper.groovy
+│   │           └── TestSampleAppPipeline.groovy
+│   └── resources
+│       └── sampleAppPipeline.jenkinsfile
+└── vars
+    └── samplePipeline.groovy
+
+13 directories, 12 files
 ```
 
