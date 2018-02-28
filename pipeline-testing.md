@@ -20,6 +20,7 @@ Lets add some filling:
 ```sh
 [sample-project] $ touch vars/samplePipeline.groovy \
 					 	 test/resources/sampleAppPipeline.jenkinsfile \
+					 	 test/resources/sampleAppPipeline.Failing.jenkinsfile \
 					 	 test/groovy/com/example/TestSampleAppPipeline.groovy \
 					 	 test/groovy/com/example/Helper.groovy
 ```
@@ -38,20 +39,20 @@ At this point our project should look like this:
 ├── src
 │   ├── main
 │   │   └── groovy
-│   │       └── Library.groovy
+│   │       └── Library.groovy # Various utilities used in pipelines, e.g., service name validators and/or constants, e.g., urls etc.
 │   └── test
 │       └── groovy
 │           └── LibraryTest.groovy
-├── test
+├── test # Actual tests for pipelines, e.g., for samplePipeline.groovy.
 │   ├── groovy
 │   │   └── com
 │   │       └── example
-│   │           ├── Helper.groovy
-│   │           └── TestSampleAppPipeline.groovy
-│   └── resources
+│   │           ├── Helper.groovy # Helper class which contains various jenkins command and variable mocks.
+│   │           └── TestSampleAppPipeline.groovy # Test class to test pipeline.
+│   └── resources # Sample pipeline files which reference, e.g., dockerAppPipe.groovy.
 │       └── sampleAppPipeline.jenkinsfile
 └── vars
-    └── samplePipeline.groovy
+    └── samplePipeline.groovy # Pipeline definition which is referenced in Jenkinsfiles, `sampleAppPipeline { // Custom variables, etc. }`
 
 13 directories, 12 files
 ```
