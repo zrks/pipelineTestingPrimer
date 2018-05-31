@@ -81,6 +81,7 @@ sourceSets {
 
 Next step is to add dependency required to use (Jenkins Pipeline Unit){https://github.com/jenkinsci/JenkinsPipelineUnit} library.
 ```groovy
+// build.gradle
 ...
 dependencies {
     // Use the latest Groovy version for building this library
@@ -89,8 +90,8 @@ dependencies {
     // Use the awesome Spock testing and specification framework
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 
-	// Jenkins pipeline testing framework - https://github.com/jenkinsci/JenkinsPipelineUnit.
-	testCompile 'com.lesfurets:jenkins-pipeline-unit:1.1'
+    // Jenkins pipeline testing framework - https://github.com/jenkinsci/JenkinsPipelineUnit.
+    testCompile 'com.lesfurets:jenkins-pipeline-unit:1.1'
 }
 ...
 ```
@@ -99,4 +100,78 @@ One more thing - `gradle init` adds spock framework dependency which we won't us
 
 ```sh
 [sample-project] $ rm -rf src/test/
+```
+
+Now as we have everything set lets proceed with first pipeline test.
+
+```groovy
+// test/groovy/com/example/TestSampleAppPipeline.groovy
+package groovy.com.example
+
+import org.junit.Before
+
+class TestSampleAppPipeline {
+
+    Helper pipelineHelper // Helper class which will contain mocked pipeline methods.
+
+    // We will create these files afterwards.
+    String successTestFileName = "sampleAppPipeline.jenkinsfile"
+    String failingTestFileName = "sampleAppPipeline.Failing.jenkinsfile"
+
+    @Before
+    void setUp() throws Exception {
+        pipelineHelper = new Helper()
+
+        pipelineHelper.setUp()
+        pipelineHelper.setJobVariables()
+        pipelineHelper.registerPipelineMethods()
+    }
+
+}
+```
+
+Lets add pipeline files.
+```sh
+[sample-project] $ mkdir test/resources && touch !$/sampleAppPipeline.jenkinsfile $!/sampleAppPipeline.failing.jenkinsfile
+```
+
+One important thing that `JenkinsPipelineUnit` framework provides is simple jenkins pipeline method mocking. Lest see how to set that up.
+
+```groovy
+// test/groovy/com/example/Helper.groovy
+package groovy.com.example
+
+import com.lesfurets.jenkins.unit.BasePipelineTest
+
+class Helper extends BasePipelineTest {
+
+    Helper(String name, // Pipeline shared library name.
+           String defaultVersion, // Default shared library version, usually master.
+           String targetPath, // Path where shared library is located.
+           String sourcePath) { // TODO: Check these two paths.
+
+        def library = library()
+                .name(name)
+                .defaultVersion(defaultVersion)
+                .allowOverride(true)
+                .implicit(true)
+                .targetPath(targetPath)
+                .retriever(localSource(sourcePath))
+                .build()
+        helper.registerSharedLibrary(library)
+
+        setScriptRoots([ 'src', 'vars', 'test/resources' ] as String[])
+        setScriptExtension('jenkinsfile')
+
+    }
+
+    void setJobVariables() {
+
+    }
+
+    void registerPipelineMethods() {
+
+    }
+
+}
 ```
