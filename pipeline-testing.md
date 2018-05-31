@@ -57,3 +57,46 @@ At this point our project should look like this:
 13 directories, 12 files
 ```
 
+Test Setup.
+
+In order to add test cases that we will be using we need to tell gradle where to find pipeline tests.
+
+```groovy
+// build.gradle
+...
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['test']
+        }
+    }
+}
+```
+
+Next step is to add dependency required to use (Jenkins Pipeline Unit){https://github.com/jenkinsci/JenkinsPipelineUnit} library.
+```groovy
+...
+dependencies {
+    // Use the latest Groovy version for building this library
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+
+    // Use the awesome Spock testing and specification framework
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+
+	// Jenkins pipeline testing framework - https://github.com/jenkinsci/JenkinsPipelineUnit.
+	testCompile 'com.lesfurets:jenkins-pipeline-unit:1.1'
+}
+...
+```
+
+One more thing - `gradle init` adds spock framework dependency which we won't use at the moment, so lets remove out `src/` tests.
+
+```sh
+[sample-project] $ rm -rf src/test/
+```

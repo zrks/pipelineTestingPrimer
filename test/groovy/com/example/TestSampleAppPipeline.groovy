@@ -1,5 +1,6 @@
 package groovy.com.example
 
+import org.junit.Before
 
 class TestSampleAppPipeline {
 
